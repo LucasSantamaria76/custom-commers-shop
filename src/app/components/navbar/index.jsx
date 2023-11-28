@@ -6,8 +6,12 @@ import { Nav } from 'rsuite';
 import { Icon } from '@/components/icons';
 import UserMenu from './user-menu';
 import NavLink from '@/components/nav-link';
+import AuthModal from '@/app/auth/modal';
+import { useModalStore } from '@/stores/modals';
+import { AUTH_MODAL } from '@/constants';
 
 function Navbar({ session }) {
+	const auth_modal = useModalStore.use[AUTH_MODAL]();
 	const pathname = usePathname();
 	const [active, setActive] = useState(pathname.replace('/', ''));
 
@@ -36,6 +40,8 @@ function Navbar({ session }) {
 						<Icon name='Bell' size='28px' />
 						<Icon name='ShoppingBag' size='28px' />
 					</>
+				) : auth_modal ? (
+					<AuthModal />
 				) : null}
 				<UserMenu session={session} />
 			</div>

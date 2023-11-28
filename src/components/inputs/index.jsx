@@ -5,7 +5,7 @@ import { Form, Input, InputGroup } from 'rsuite';
 export const TextInput = ({ label, name, error, ...props }) => (
 	<Form.Group controlId={name} {...props} className='w-full md:w-96'>
 		<Form.ControlLabel className='mb-1 cursor-pointer'>{label}</Form.ControlLabel>
-		<Form.Control name={name} size='lg' shouldResetWithUnmount={true} />
+		<Form.Control name={name} size='lg' className='text-lg' />
 	</Form.Group>
 );
 
@@ -20,14 +20,14 @@ export const InputPassword = ({ label, name, error, ...props }) => {
 						name={name}
 						type={showPassword ? 'text' : 'password'}
 						autoComplete='off'
-						shouldResetWithUnmount={true}
+						className='text-lg'
 					/>
 
-					<InputGroup.Button
+					<Icon
+						name={`Eye${showPassword ? 'Off' : ''}`}
 						onClick={() => setShowPassword(!showPassword)}
-						className='cursor-pointer'>
-						<Icon name={`Eye${showPassword ? 'Off' : ''}`} />
-					</InputGroup.Button>
+						className='m-2 cursor-pointer'
+					/>
 				</InputGroup>
 			</Form.Group>
 		</>

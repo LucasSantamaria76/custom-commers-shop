@@ -1,28 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Form, Input, Modal, Notification, useToaster } from 'rsuite';
+import {
+	Button,
+	ButtonGroup,
+	Form,
+	Input,
+	Modal,
+	Notification,
+	Radio,
+	RadioGroup,
+	useToaster,
+} from 'rsuite';
 
 import { AUTH_MODAL } from '@/constants';
 import { useModalStore } from '@/stores/modals';
 import { InputPassword, TextInput } from '@/components/inputs';
-import { loginModel } from './schemas';
-import { SignIn } from './authFunctions';
+import { loginModel, registerModel } from './schemas';
+import { SignIn, SignUp } from './authFunctions';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
-const initialForm = { email: '', password: '' };
+const initialSignInForm = { email: '', password: '' };
+const initialSignUpForm = { ...initialSignInForm, full_name: '', verifyPassword: '' };
 
 function AuthModal() {
 	const onClose = useModalStore.use.onClose();
 	const auth_modal = useModalStore.use[AUTH_MODAL]();
-	const [formValue, setFormValue] = useState(initialForm);
+	const [isSignIn, setIsSignIn] = useState(true);
+	const [formValue, setFormValue] = useState(isSignIn ? initialSignInForm : initialSignUpForm);
+	const formRef = useRef();
 	const router = useRouter();
 	const toast = useToaster();
 
-	const handleChange = (data) => setFormValue(data);
-
 	const handleSubmit = async () => {
-		const { error } = await SignIn(formValue);
+		if (!formRef.current.check()) return;
+
+		const { error } = isSignIn ? await SignIn(formValue) : await SignUp(formValue);
+
 		if (!error) {
 			router.refresh();
 			onClose(AUTH_MODAL);
@@ -45,23 +61,60 @@ function AuthModal() {
 			autoFocus
 			onClose={() => onClose(AUTH_MODAL)}
 			dialogClassName='flex h-screen justify-center items-center select-none'>
-			<Modal.Header>
-				<Modal.Title className='text-xl font-bold text-center'>Inicio de sesión</Modal.Title>
-			</Modal.Header>
+			<Modal.Header />
 
 			<Modal.Body>
 				<Form
 					fluid
-					model={loginModel}
+					ref={formRef}
+					model={isSignIn ? loginModel : registerModel}
 					onSubmit={(e) => handleSubmit(e)}
 					formValue={formValue}
-					onChange={handleChange}>
+					onChange={setFormValue}>
+					<Form.Group controlId='isSignIn'>
+						<RadioGroup
+							name='isSignIn'
+							inline
+							appearance='picker'
+							value={isSignIn}
+							onChange={setIsSignIn}
+							className='w-full overflow-hidden'>
+							<Radio
+								value={true}
+								className={cn('w-1/2 text-center', {
+									'bg-blue-50': isSignIn,
+								})}>
+								<p className='w-full text-xl'>Iniciar sesión</p>
+							</Radio>
+							<Radio
+								value={false}
+								className={cn('w-1/2 text-center', {
+									'bg-blue-50': !isSignIn,
+								})}>
+								<p className='w-full text-xl'>Registrarse</p>
+							</Radio>
+						</RadioGroup>
+					</Form.Group>
+					{!isSignIn && <TextInput name='full_name' label='Nombre completo' />}
 					<TextInput name='email' label='Correo electrónico' />
 					<InputPassword name='password' label='Contraseña' />
+					{!isSignIn && <InputPassword name='verifyPassword' label='Confirmar contraseña' />}
 
 					<Button type='submit' className='w-full mt-5' appearance='ghost' size='lg'>
 						Enviar
 					</Button>
+					{isSignIn && (
+						<Button className='w-full mt-5' appearance='ghost' color='yellow' size='lg'>
+							<Image
+								width={24}
+								height={24}
+								src='/google.png'
+								alt='logo de google'
+								className='mr-2'
+							/>
+							Iniciar sesión con Google
+						</Button>
+					)}
 				</Form>
 			</Modal.Body>
 		</Modal>

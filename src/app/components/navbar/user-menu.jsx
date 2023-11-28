@@ -16,31 +16,26 @@ function UserMenu({ session }) {
 		router.refresh();
 	}
 
-	const renderIconButton = (props, ref) => {
+	const renderIconButton = (props) => {
 		return (
 			<>
 				{session ? (
 					session.user.profile?.avatar_url ? (
 						<Avatar
 							{...props}
-							ref={ref}
 							circle
 							src={session.user.profile?.avatar_url}
 							alt='Avatar de usuario'
 						/>
 					) : (
-						<Avatar {...props} ref={ref} circle className='bg-teal-500' alt='Avatar de usuario'>
-							{session.user.profile?.full_name[0].toUpperCase()}
+						<Avatar {...props} circle className='font-bold bg-teal-500' alt='Avatar de usuario'>
+							{session.user.profile?.full_name
+								? session.user.profile.full_name[0].toUpperCase()
+								: session.user.email[0]?.toUpperCase()}
 						</Avatar>
 					)
 				) : (
-					<Icon
-						name='UserRound'
-						size='44px'
-						{...props}
-						ref={ref}
-						className='p-1 rounded-full bg-slate-300'
-					/>
+					<Icon name='UserRound' size='44px' {...props} className='p-1 rounded-full bg-slate-300' />
 				)}
 			</>
 		);

@@ -4,7 +4,6 @@ import { esAR } from 'rsuite/locales';
 import { CustomProvider } from 'rsuite';
 import LayoutWrapper from './components/layout-wrapper';
 import { inter } from '@/lib/fonts';
-import AuthModal from './auth/modal';
 
 export const metadata = {
 	title: 'Create Next App',
@@ -17,7 +16,6 @@ export default function RootLayout({ children }) {
 			<body className={`${inter.className} antialiased`}>
 				<CustomProvider theme='light' locale={esAR}>
 					<LayoutWrapper>{children}</LayoutWrapper>
-					<AuthModal />
 				</CustomProvider>
 			</body>
 		</html>
