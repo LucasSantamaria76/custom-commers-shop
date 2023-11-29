@@ -12,3 +12,9 @@ export const selectColumns = {
 	profiles: '*',
 	providers: '*',
 };
+
+export const errorDB = {
+	'Invalid login credentials': 'Credenciales de acceso invalidos',
+	'Email rate limit exceeded': 'Error al registrar, intente mas tarde',
+	'Email not confirmed': 'Correo electrónico sin confirmar',
+};
