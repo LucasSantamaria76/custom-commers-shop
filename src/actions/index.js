@@ -70,3 +70,15 @@ export async function getSession() {
 
 	return session;
 }
+
+/* export async function toggleFavoriteDB(formData) {
+	const { isFavorite, product_id, user_id } = Object.fromEntries(formData.entries());
+	const supabase = createServerComponentClient({ cookies });
+
+	const { error } = await (!!isFavorite
+		? supabase.from('favorites').delete().match({ product_id, user_id })
+		: supabase.from('favorites').insert([{ product_id, user_id }]));
+
+	
+	return true;
+} */

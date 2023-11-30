@@ -4,7 +4,7 @@ import { Icon } from '@/components/icons';
 import { AUTH_MODAL } from '@/constants';
 import { useModalStore } from '@/stores/modals';
 import { Avatar, Dropdown } from 'rsuite';
-import { SignOut } from '../../auth/authFunctions';
+import { SignOut } from '../../../auth/authFunctions';
 import { useRouter } from 'next/navigation';
 
 function UserMenu({ session }) {
@@ -42,11 +42,14 @@ function UserMenu({ session }) {
 	};
 
 	return (
-		<Dropdown renderToggle={renderIconButton} className='flex-col hidden md:flex'>
+		<Dropdown
+			placement='bottomEnd'
+			renderToggle={renderIconButton}
+			className='flex-col hidden md:flex'>
 			{session ? (
 				<>
 					<Dropdown.Item disabled className='flex items-center gap-2 text-base text-blue-900'>
-						Usuario:{' '}
+						Usuario:
 						<span className='font-bold text-teal-700'>
 							{session.user.profile?.full_name ?? session.user.email}
 						</span>
@@ -65,7 +68,7 @@ function UserMenu({ session }) {
 					onClick={() => onShow(AUTH_MODAL)}
 					className='flex items-center gap-2 text-base'>
 					<Icon name='LogIn' />
-					Iniciar sesión o registrarse
+					Iniciar sesión
 				</Dropdown.Item>
 			)}
 		</Dropdown>

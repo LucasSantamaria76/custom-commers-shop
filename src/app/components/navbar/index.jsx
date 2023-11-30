@@ -1,19 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Nav } from 'rsuite';
 import { Icon } from '@/components/icons';
-import UserMenu from './user-menu';
+import UserMenu from './components/user-menu';
 import NavLink from '@/components/nav-link';
 import AuthModal from '@/app/auth/modal';
 import { useModalStore } from '@/stores/modals';
 import { AUTH_MODAL } from '@/constants';
+import { useUserStore } from '@/stores/user';
+import FavoritesList from './components/favorites-list';
 
 function Navbar({ session }) {
 	const auth_modal = useModalStore.use[AUTH_MODAL]();
 	const pathname = usePathname();
 	const [active, setActive] = useState(pathname.replace('/', ''));
+	const setUser = useUserStore.use.setUser();
+
+	useEffect(() => {
+		session ? setUser(session.user?.profile) : setUser(null);
+	}, [session]);
 
 	return (
 		<div className='flex items-center justify-around shadow dark:shadow-slate-300 h-14'>
@@ -33,10 +40,10 @@ function Navbar({ session }) {
 					Contáctame
 				</Nav.Item>
 			</Nav>
-			<div className='flex items-center gap-8'>
+			<div className='items-center hidden gap-8 md:flex'>
 				{session ? (
 					<>
-						<Icon name='Bookmark' id='fav' size='28px' />
+						<FavoritesList />
 						<Icon name='Bell' size='28px' />
 						<Icon name='ShoppingBag' size='28px' />
 					</>

@@ -9,7 +9,7 @@ export const selectColumns = {
 	products: '*, images(id,url), categories(name)',
 	categories: '*',
 	favorites: '*',
-	profiles: '*',
+	profiles: '*,favorites(product_id)',
 	providers: '*',
 };
 
