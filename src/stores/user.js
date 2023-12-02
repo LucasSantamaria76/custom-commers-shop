@@ -11,14 +11,15 @@ const initialState = {
 	updated_at: null,
 	created_at: null,
 	favorites: [],
-	cart: [],
+	cart: {},
 };
 
 const useUserStoreBase = create((set, get) => ({
 	...initialState,
 	setUser: (user) => {
 		if (user) {
-			const { id, full_name, email, avatar_url, role, updated_at, created_at, favorites } = user;
+			const { id, full_name, email, avatar_url, role, updated_at, created_at, favorites, carts } =
+				user;
 			set(() => ({
 				id,
 				full_name,
@@ -28,6 +29,7 @@ const useUserStoreBase = create((set, get) => ({
 				updated_at,
 				created_at,
 				favorites: favorites.map((el) => el.product_id),
+				cart: carts.find((el) => !el.finalized),
 			}));
 		} else set({ ...initialState });
 	},

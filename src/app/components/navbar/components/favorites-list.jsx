@@ -43,7 +43,7 @@ function FavoritesList() {
 	}, [favorites]);
 
 	return (
-		<Dropdown panel placement='bottomEnd' renderToggle={renderIconButton} trigger='hover'>
+		<Dropdown placement='bottomEnd' renderToggle={renderIconButton} trigger='click'>
 			{favoritesList.length ? (
 				favoritesList.map((favorite) => <ItemFavorite key={favorite.id} {...favorite} />)
 			) : (

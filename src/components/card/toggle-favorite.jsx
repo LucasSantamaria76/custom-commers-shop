@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { Icon } from '../icons';
 import { cn } from '@/lib/utils';
 
-function ToggleFavorite({ id }) {
+function ToggleFavorite({ id, size = '26' }) {
 	const user = useUserStore.use.id();
 	const favorites = useUserStore.use.favorites();
 	const toggleFavorite = useUserStore.use.toggleFavorite();
@@ -32,7 +32,7 @@ function ToggleFavorite({ id }) {
 				className={cn('cursor-pointer', {
 					'fill-orange-500/50': favorites.includes(id),
 				})}
-				size='26px'
+				size={`${size}px`}
 			/>
 		</div>
 	);

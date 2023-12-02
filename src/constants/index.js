@@ -9,8 +9,9 @@ export const selectColumns = {
 	products: '*, images(id,url), categories(name)',
 	categories: '*',
 	favorites: '*',
-	profiles: '*,favorites(product_id)',
+	profiles: '*,favorites(product_id),carts(*,items_cart(*))',
 	providers: '*',
+	carts: '*,items_cart(*)',
 };
 
 export const errorDB = {

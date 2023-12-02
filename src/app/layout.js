@@ -1,4 +1,5 @@
 import './globals.css';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'rsuite/dist/rsuite.min.css';
 import { esAR } from 'rsuite/locales';
 import { CustomProvider } from 'rsuite';

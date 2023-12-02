@@ -1,17 +1,20 @@
-import { formatPrice } from "@/lib/formatPrice";
+import { formatPrice } from '@/lib/formatPrice';
+import { cn } from '@/lib/utils';
 
-
-function PriceTag({ price, discount }) {
-  return (
+function PriceTag({ price, discount, xl }) {
+	return (
 		<>
-			<div className='flex flex-col h-10 mt-2'>
+			<div className='flex flex-col'>
 				{discount ? (
 					<>
-						<p className='text-xs'>
+						<p
+							className={cn('text-xs', {
+								'text-lg': xl,
+							})}>
 							Antes: <span className='text-red-500 line-through'>{formatPrice(price)}</span>
 							<span className='ml-3 text-green-500'>{`${discount} % OFF`}</span>
 						</p>
-						<p>
+						<p className={cn('text-sm', { 'text-2xl': xl })}>
 							Ahora:{' '}
 							<span className='text-green-500'>
 								{formatPrice(price - price * (discount / 100))}
@@ -19,7 +22,7 @@ function PriceTag({ price, discount }) {
 						</p>
 					</>
 				) : (
-					<p>
+					<p className={cn('text-sm', { 'text-2xl': xl })}>
 						Precio: <span className='text-green-500'>{formatPrice(price)}</span>
 					</p>
 				)}

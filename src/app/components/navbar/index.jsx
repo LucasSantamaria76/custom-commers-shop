@@ -11,6 +11,7 @@ import { useModalStore } from '@/stores/modals';
 import { AUTH_MODAL } from '@/constants';
 import { useUserStore } from '@/stores/user';
 import FavoritesList from './components/favorites-list';
+import Link from 'next/link';
 
 function Navbar({ session }) {
 	const auth_modal = useModalStore.use[AUTH_MODAL]();
@@ -45,7 +46,9 @@ function Navbar({ session }) {
 					<>
 						<FavoritesList />
 						<Icon name='Bell' size='28px' />
-						<Icon name='ShoppingBag' size='28px' />
+						<Link href='/cart'>
+							<Icon name='ShoppingBag' size='28px' />
+						</Link>
 					</>
 				) : auth_modal ? (
 					<AuthModal />
