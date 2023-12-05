@@ -1,6 +1,6 @@
 'use server';
 
-import { selectColumns } from '@/constants';
+import { CARTS, FAVORITES, PROFILES, USER_ID, selectColumns } from '@/constants';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
@@ -64,8 +64,25 @@ export async function getSession() {
 	} = await supabase.auth.getSession();
 
 	if (session) {
-		const { data } = await getDbTableById('profiles', session?.user?.id);
-		data && (session.user.profile = data);
+		const { data: user } = await getDbTableById(PROFILES, session?.user?.id);
+		if (user) {
+			const {
+				carts: { items_cart, ...cart },
+				favorites,
+				...profile
+			} = user;
+
+			session.user.profile = profile;
+
+			session.user.profile.cart = cart;
+
+			session.user.profile.itemsCart = items_cart.reduce((acc, val) => {
+				!acc[val.product_id] && (acc[val.product_id] = val.quantity);
+				return acc;
+			}, {});
+
+			session.user.profile.favorites = favorites.map((el) => el.product_id);
+		}
 	}
 
 	return session;

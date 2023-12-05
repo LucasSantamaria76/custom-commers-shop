@@ -39,8 +39,9 @@ function FormRegisterAndLogin() {
 		try {
 			if (!formRef.current.check()) return;
 			setLoading(true);
-			const { error } = isSignIn ? await SignIn(formValue) : await SignUp(formValue);
-			error && console.log(error.message);
+			const { error, info } = isSignIn ? await SignIn(formValue) : await SignUp(formValue);
+			error && console.log(errorDB[error.message] ?? error.message);
+			info && console.log({ info });
 			if (!error) {
 				router.refresh();
 				onClose(AUTH_MODAL);
@@ -48,7 +49,11 @@ function FormRegisterAndLogin() {
 				toast.push(
 					<Notification
 						type={'error'}
-						header={<p className='text-lg font-bold text-white'>{errorDB[error.message]}</p>}
+						header={
+							<p className='text-lg font-bold text-white'>
+								{errorDB[error.message] ?? error.message}
+							</p>
+						}
 						className='border-2 border-red-500 bg-red-400/50'
 					/>,
 					{

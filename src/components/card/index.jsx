@@ -1,10 +1,10 @@
 import { Panel } from 'rsuite';
-import { Icon } from '../icons';
 import PriceTag from '../price-tag';
 import ToggleFavorite from './toggle-favorite';
 import Link from 'next/link';
+import BtnAddToCart from '../cart/btn-add-to-cart';
 
-const Card = ({ id, name, price, discount, stock, images }) => (
+const Card = ({ id, name, price, discount, images }) => (
 	<Panel
 		shaded
 		bordered
@@ -25,7 +25,7 @@ const Card = ({ id, name, price, discount, stock, images }) => (
 						Ver detalles
 					</Link>
 					<div className='flex gap-2'>
-						<Icon name='ShoppingBag' className='cursor-pointer' size='26px' />
+						<BtnAddToCart {...{ id, price, discount }} />
 						<ToggleFavorite id={id} />
 					</div>
 				</div>
