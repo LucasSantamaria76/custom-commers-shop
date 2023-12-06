@@ -44,6 +44,7 @@ const storeBase = (set, get) => ({
 	},
 	addToCart: async ({ id, price, discount }) => {
 		let errorDB;
+		const inCart = Object.keys(get().itemsCart).includes(id);
 		/**
 		 * * Cree un TRIGGER en la DB que cada vez que se INSERTA, ACTUALIZA o BORRA un producto se actualiza el total del carrito
 		 */
@@ -53,30 +54,26 @@ const storeBase = (set, get) => ({
 			 */
 			set((state) => {
 				state.cart.total_cart += price - price * (discount / 100);
+				state.itemsCart[id] = inCart ? state.itemsCart[id] + 1 : 1;
 			});
-			if (Object.keys(get().itemsCart).includes(id)) {
-				set((state) => {
-					state.itemsCart[id] += 1;
-				});
-				const { data, error } = await supabaseClient
-					.from(ITEMS_CART)
-					.update([{ quantity: get().itemsCart[id] }])
-					.eq('product_id', id);
 
-				error && (errorDB = error);
-			} else {
-				set((state) => {
-					state.itemsCart[id] = 1;
-				});
-				const { data, error } = await supabaseClient
-					.from(ITEMS_CART)
-					.insert([{ product_id: id, cart_id: get().cart?.id }]);
-				error && (errorDB = error);
-			}
-			if (errorDB) {
+			/**
+			 * * Actualizo la DB
+			 */
+			const { data, error } = inCart
+				? await supabaseClient
+						.from(ITEMS_CART)
+						.update([{ quantity: get().itemsCart[id] }])
+						.eq('product_id', id)
+				: await supabaseClient
+						.from(ITEMS_CART)
+						.insert([{ product_id: id, cart_id: get().cart?.id }]);
+
+			if (error) {
 				/**
 				 * ! Si hay un error en DB vuelvo la store como estaba
 				 */
+				console.log(error);
 				set((state) => {
 					state.cart.total_cart -= price - price * (discount / 100);
 				});
@@ -87,6 +84,23 @@ const storeBase = (set, get) => ({
 			}
 		} catch (error) {
 			console.log(error.message ?? error);
+		}
+	},
+	removeProductToCart: async (id, price, discount, quantity) => {
+		let errorDB;
+		if (get().itemsCart[id] > quantity) {
+			set((state) => {
+				state.cart.total_cart -= (price - price * (discount / 100)) * quantity;
+			});
+			set((state) => {
+				state.itemsCart[id] -= quantity;
+			});
+			const { data, error } = await supabaseClient
+				.from(ITEMS_CART)
+				.update([{ quantity: get().itemsCart[id] }])
+				.eq('product_id', id);
+
+			error && (errorDB = error);
 		}
 	},
 });

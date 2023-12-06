@@ -18,15 +18,19 @@ function Navbar({ session }) {
 	const auth_modal = useModalStore.use[AUTH_MODAL]();
 	const pathname = usePathname();
 	const [active, setActive] = useState(pathname.replace('/', ''));
+	const [productInCart, setProductInCart] = useState(0);
 	const setUser = useUserStore.use.setUser();
-
-	const productInCart = Object.values(useUserStore.use.itemsCart()).reduce(
-		(acc, val) => (acc += val)
-	);
+	const itemsCart = useUserStore.use.itemsCart();
 
 	useEffect(() => {
 		session ? setUser(session.user?.profile) : setUser(null);
 	}, [session]);
+
+	useEffect(() => {
+		Object.values(itemsCart).length
+			? setProductInCart(Object.values(itemsCart).reduce((acc, val) => (acc += val)))
+			: setProductInCart(0);
+	}, [itemsCart]);
 
 	return (
 		<div className='flex items-center justify-around shadow dark:shadow-slate-300 h-14'>
