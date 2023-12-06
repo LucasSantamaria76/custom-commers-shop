@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Nav } from 'rsuite';
+import { Badge, Nav } from 'rsuite';
 import { Icon } from '@/components/icons';
 import UserMenu from './components/user-menu';
 import NavLink from '@/components/nav-link';
@@ -12,12 +12,17 @@ import { AUTH_MODAL } from '@/constants';
 import { useUserStore } from '@/stores/user';
 import FavoritesList from './components/favorites-list';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 function Navbar({ session }) {
 	const auth_modal = useModalStore.use[AUTH_MODAL]();
 	const pathname = usePathname();
 	const [active, setActive] = useState(pathname.replace('/', ''));
 	const setUser = useUserStore.use.setUser();
+
+	const productInCart = Object.values(useUserStore.use.itemsCart()).reduce(
+		(acc, val) => (acc += val)
+	);
 
 	useEffect(() => {
 		session ? setUser(session.user?.profile) : setUser(null);
@@ -46,7 +51,13 @@ function Navbar({ session }) {
 					<>
 						<FavoritesList />
 						<Icon name='Bell' size='28px' />
-						<Link href='/cart'>
+						<Link href='/cart' className='relative'>
+							<Badge
+								content={productInCart}
+								className={cn('absolute -left-2 -top-2 flex rounded-full bg-cyan-500', {
+									hidden: !productInCart,
+								})}
+							/>
 							<Icon name='ShoppingBag' size='28px' />
 						</Link>
 					</>

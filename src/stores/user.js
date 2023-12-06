@@ -43,7 +43,14 @@ const storeBase = (set, get) => ({
 		}
 	},
 	addToCart: async ({ id, price, discount }) => {
+		let errorDB;
+		/**
+		 * * Cree un TRIGGER en la DB que cada vez que se INSERTA, ACTUALIZA o BORRA un producto se actualiza el total del carrito
+		 */
 		try {
+			/**
+			 * * Actualizo la store de forma optimista
+			 */
 			set((state) => {
 				state.cart.total_cart += price - price * (discount / 100);
 			});
@@ -55,6 +62,8 @@ const storeBase = (set, get) => ({
 					.from(ITEMS_CART)
 					.update([{ quantity: get().itemsCart[id] }])
 					.eq('product_id', id);
+
+				error && (errorDB = error);
 			} else {
 				set((state) => {
 					state.itemsCart[id] = 1;
@@ -62,11 +71,22 @@ const storeBase = (set, get) => ({
 				const { data, error } = await supabaseClient
 					.from(ITEMS_CART)
 					.insert([{ product_id: id, cart_id: get().cart?.id }]);
-
-				error && console.log(error.message);
+				error && (errorDB = error);
+			}
+			if (errorDB) {
+				/**
+				 * ! Si hay un error en DB vuelvo la store como estaba
+				 */
+				set((state) => {
+					state.cart.total_cart -= price - price * (discount / 100);
+				});
+				set((state) => {
+					state.itemsCart[id] -= 1;
+				});
+				throw new Error(error);
 			}
 		} catch (error) {
-			console.log(error);
+			console.log(error.message ?? error);
 		}
 	},
 });

@@ -29,7 +29,7 @@ function BtnAddToCart({ id, price, discount }) {
 			<div className='relative'>
 				<Badge
 					content={quantity}
-					className={cn('absolute -left-1 -top-1 flex rounded-full bg-cyan-500', {
+					className={cn('absolute -left-1 -top-2 flex rounded-full bg-cyan-500', {
 						hidden: !quantity,
 					})}
 				/>
