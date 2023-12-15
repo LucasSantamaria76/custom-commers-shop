@@ -6,27 +6,20 @@ import { useUserStore } from '@/stores/user';
 import { useEffect, useState } from 'react';
 import { Dropdown } from 'rsuite';
 import ItemFavorite from './item-favorite';
+import { PRODUCTS } from '@/constants';
 
 const renderIconButton = (props) => {
 	return <Icon name='Bookmark' id='fav' size='28px' {...props} />;
 };
 
-async function getFavoritesProducts(user) {
+async function getFavoritesProducts(favorites) {
 	try {
 		const { data, error } = await supabaseClient
-			.from('products')
-			.select(
-				`
-            id,name,stock,images(url),
-            favorites!inner (
-              user_id
-            )
-          `
-			)
-			.filter('favorites.user_id', 'eq', user);
+			.from(PRODUCTS)
+			.select('id,name,stock,images')
+			.in('id', favorites);
 
 		if (error) throw Error(error.message);
-
 		return data;
 	} catch (error) {
 		console.log(error);
@@ -35,11 +28,11 @@ async function getFavoritesProducts(user) {
 
 function FavoritesList() {
 	const user = useUserStore.use.id();
-	const favorites = useUserStore.use.favorites();
+	const favorites = useUserStore.use.fav();
 	const [favoritesList, setFavoritesList] = useState([]);
 
 	useEffect(() => {
-		user && getFavoritesProducts(user).then((data) => setFavoritesList(data));
+		user && getFavoritesProducts(favorites).then((data) => setFavoritesList(data));
 	}, [favorites]);
 
 	return (

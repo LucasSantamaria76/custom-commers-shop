@@ -4,9 +4,9 @@ import { useUserStore } from '@/stores/user';
 import { Icon } from '../icons';
 import { cn } from '@/lib/utils';
 
-function ToggleFavorite({ id, size = '26' }) {
+function ToggleFavorite({ id, size = '26', color = 'black' }) {
 	const user = useUserStore.use.id();
-	const favorites = useUserStore.use.favorites();
+	const favorites = useUserStore.use.fav();
 	const toggleFavorite = useUserStore.use.toggleFavorite();
 
 	return (
@@ -27,10 +27,12 @@ function ToggleFavorite({ id, size = '26' }) {
 				</div>
 			</span>
 			<Icon
-				onClick={() => toggleFavorite(id, user)}
+				onClick={() => user && toggleFavorite(id)}
 				name='Bookmark'
-				className={cn('cursor-pointer', {
+				color={color}
+				className={cn({
 					'fill-orange-500/50': favorites.includes(id),
+					'cursor-pointer': user,
 				})}
 				size={`${size}px`}
 			/>

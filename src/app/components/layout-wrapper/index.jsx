@@ -10,7 +10,7 @@ export default async function LayoutWrapper({ children }) {
 				<Navbar session={session} />
 			</Header>
 			<Content>{children}</Content>
-			<Footer>Footer</Footer>
+			<Footer className='h-12 text-white bg-teal-900'>Footer</Footer>
 		</Container>
 	);
 }

@@ -1,25 +1,25 @@
-import { getDbTableById } from '@/actions';
+import { getDbTableByColumn } from '@/actions';
 import SliderImages from '@/components/slider-images';
 import { PRODUCTS } from '@/constants';
-import DetailsProduct from './details-product';
+import DetailsProduct from './components/details-product';
 import { Icon } from '@/components/icons';
 import Link from 'next/link';
+import { ViewImages } from './components/view-images';
 
 async function pageProductID({ params }) {
-	const { data: product, error } = await getDbTableById(PRODUCTS, params.id);
-
-	const images = product.images.map((image) => image.url);
+	const { data: product, error } = await getDbTableByColumn(PRODUCTS, 'id', params.id, true);
 
 	return (
-		<div className='relative flex items-center justify-center h-full'>
+		<article className='relative flex items-center justify-center h-[calc(100vh-105px)] w-full mt-14'>
 			<Link href='/products' className='text-lg hover:no-underline'>
-				<Icon name='ArrowLeftSquare' className='absolute top-5 left-5' size='48px' />
+				<Icon name='ArrowLeftSquare' className='absolute top-10 left-5' size='32px' />
 			</Link>
-			<div className='flex flex-col justify-center w-3/4 gap-3 lg:flex-row'>
-				<SliderImages images={images} />
+			<section className='flex flex-col justify-center w-full h-full gap-3 lg:flex-row'>
+				{/* <SliderImages images={product.images} /> */}
+				<ViewImages images={product.images} />
 				<DetailsProduct {...product} />
-			</div>
-		</div>
+			</section>
+		</article>
 	);
 }
 export default pageProductID;

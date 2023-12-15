@@ -5,9 +5,9 @@ import { Icon } from '../icons';
 import { cn } from '@/lib/utils';
 import { Badge } from 'rsuite';
 
-function BtnAddToCart({ id, price, discount }) {
+function BtnAddToCart({ id, sale_price, discount, name, stock, images, color = 'black' }) {
 	const user = useUserStore.use.id();
-	const quantity = useUserStore.use.itemsCart()[id];
+	const quantity = useUserStore.use.cart_items().quantity ?? 0;
 	const addToCart = useUserStore.use.addToCart();
 
 	return (
@@ -37,7 +37,8 @@ function BtnAddToCart({ id, price, discount }) {
 					name='ShoppingBag'
 					className='cursor-pointer'
 					size='26px'
-					onClick={user && (() => addToCart({ id, price, discount }))}
+					color={color}
+					onClick={user && (() => addToCart({ id, sale_price, discount, name, stock, images }))}
 				/>
 			</div>
 		</div>

@@ -6,7 +6,6 @@ import {
 	Button,
 	ButtonGroup,
 	Form,
-	Input,
 	Loader,
 	Notification,
 	Radio,
@@ -16,7 +15,7 @@ import {
 
 import { useModalStore } from '@/stores/modals';
 import { AUTH_MODAL } from '@/constants';
-import { InputPassword, TextInput } from '@/components/inputs';
+import { InputPassword, TextInput } from '@/components/ui';
 import { loginModel, registerModel } from './schemas';
 import { SignIn, SignUp } from './authFunctions';
 import { cn } from '@/lib/utils';

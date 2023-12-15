@@ -1,23 +1,23 @@
 //tables
 export const PRODUCTS = 'products';
 export const CATEGORIES = 'categories';
-export const FAVORITES = 'favorites';
 export const PROFILES = 'profiles';
 export const PROVIDERS = 'providers';
 export const CARTS = 'carts';
-export const ITEMS_CART = 'items_cart';
+export const CART_ITEMS = 'cart_items';
 
 //modals
 export const AUTH_MODAL = 'auth_modal';
 
+// select column DB
 export const selectColumns = {
-	[PRODUCTS]: '*, images(id,url), categories(name)',
+	[PRODUCTS]: '*, categories(name)',
 	[CATEGORIES]: '*',
-	[FAVORITES]: '*',
-	[PROFILES]: '*,favorites(product_id),carts(*,items_cart(*))',
+	[PROFILES]:
+		'*,carts(*),cart_items(quantity,product_id,products(name,discount,stock,sale_price,images))',
 	[PROVIDERS]: '*',
-	[CARTS]: '*,items_cart(*)',
-	[ITEMS_CART]: '*',
+	[CARTS]: '*,cart_items(*)',
+	[CART_ITEMS]: '*,products(discount, id, name, sale_price, stock,images)',
 };
 
 export const errorDB = {

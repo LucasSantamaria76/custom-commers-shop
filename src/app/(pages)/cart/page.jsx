@@ -1,14 +1,16 @@
 import DetailsCart from '@/components/cart/details-cart';
 import { Icon } from '@/components/icons';
 
-function pageCart() {
+async function pageCart() {
 	return (
-		<article className='w-full h-full p-5 bg-teal-100'>
-			<section className='flex items-center justify-center gap-2'>
-				<Icon name='ShoppingBag' size='48px' />
-				<h2 className='text-4xl font-bold'>Mi carrito de compras</h2>
+		<article className='flex flex-col w-full h-full'>
+			<section className='fixed flex items-end justify-center w-full h-32 gap-2 pb-4 bg-white shadow-md'>
+				<Icon name='ShoppingBag' size='40px' />
+				<h2 className='text-3xl font-bold'>Mi carrito de compras</h2>
 			</section>
-			<DetailsCart />
+			<section className='flex flex-col h-full mt-[140px] pl-5'>
+				<DetailsCart />
+			</section>
 		</article>
 	);
 }

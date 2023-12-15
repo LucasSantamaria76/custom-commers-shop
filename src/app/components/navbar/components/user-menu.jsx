@@ -29,9 +29,9 @@ function UserMenu({ session }) {
 						/>
 					) : (
 						<Avatar {...props} circle className='font-bold bg-teal-500' alt='Avatar de usuario'>
-							{session.user.profile?.full_name
-								? session.user.profile.full_name[0].toUpperCase()
-								: session.user.email[0]?.toUpperCase()}
+							{session.profile?.full_name
+								? session.profile.full_name[0].toUpperCase()
+								: session.user?.email[0]?.toUpperCase()}
 						</Avatar>
 					)
 				) : (
@@ -51,7 +51,7 @@ function UserMenu({ session }) {
 					<Dropdown.Item disabled className='flex items-center gap-2 text-base text-blue-900'>
 						Usuario:
 						<span className='font-bold text-teal-700'>
-							{session.user.profile?.full_name ?? session.user.email}
+							{session.profile?.full_name ?? session.user.email}
 						</span>
 					</Dropdown.Item>
 					<Dropdown.Separator />

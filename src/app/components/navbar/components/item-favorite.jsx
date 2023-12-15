@@ -10,7 +10,7 @@ function ItemFavorite({ id, name, images, stock }) {
 				className='flex items-center gap-2 px-5 py-1 min-w-max'
 				href={`/products/${id}`}>
 				<div className='flex items-center gap-5 px-2 py-1'>
-					<Image width={64} height={64} src={images[0].url} alt={`imagen de ${name}`} />
+					<Image width={64} height={64} src={images[0]} alt={`imagen de ${name}`} />
 					<div className='flex flex-col'>
 						<p className='text-lg'>{name}</p>
 						<p>

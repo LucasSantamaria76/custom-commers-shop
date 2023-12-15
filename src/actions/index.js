@@ -30,14 +30,13 @@ export async function getDbTable(table) {
 	}
 }
 
-export async function getDbTableById(table, id) {
+export async function getDbTableByColumn(table, col, val, single = false) {
 	const supabaseServer = createServerComponentClient({ cookies });
 	try {
 		const { data, error } = await supabaseServer
 			.from(table)
 			.select(selectColumns[table])
-			.eq('id', id)
-			.single();
+			.eq(col, val);
 
 		if (error)
 			return {
@@ -46,7 +45,7 @@ export async function getDbTableById(table, id) {
 			};
 
 		return {
-			data,
+			data: single ? data[0] : data,
 			error: null,
 		};
 	} catch (error) {
@@ -64,25 +63,8 @@ export async function getSession() {
 	} = await supabase.auth.getSession();
 
 	if (session) {
-		const { data: user } = await getDbTableById(PROFILES, session?.user?.id);
-		if (user) {
-			const {
-				carts: { items_cart, ...cart },
-				favorites,
-				...profile
-			} = user;
-
-			session.user.profile = profile;
-
-			session.user.profile.cart = cart;
-
-			session.user.profile.itemsCart = items_cart.reduce((acc, val) => {
-				!acc[val.product_id] && (acc[val.product_id] = val.quantity);
-				return acc;
-			}, {});
-
-			session.user.profile.favorites = favorites.map((el) => el.product_id);
-		}
+		const { data: profile } = await getDbTableByColumn(PROFILES, 'id', session?.user?.id, true);
+		if (profile) session.profile = profile;
 	}
 
 	return session;
